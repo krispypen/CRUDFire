@@ -1,0 +1,68 @@
+th.actions {
+  width: 100px;
+}
+
+th {
+  font-family: 'Muli', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #2e2b29;
+}
+
+td {
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  color: #2e2b29;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 800;
+  font-family: 'Muli', sans-serif;
+  color: #2e2b29;
+}
+
+.table thead th {
+  border: none;
+}
+
+.table td {
+  border-top: 2px solid white;
+}
+
+.table-hover tbody tr:hover {
+  background-color: white;
+  box-shadow: 2px 2px 8px 0 rgba(12, 0, 51, 0.1);
+}
+
+.btn.btn-primary {
+  border-radius: 2rem;
+  float: right;
+  font-family: 'Muli', sans-serif;
+  font-size: 14px;
+  background-color: #02a0e6;
+  border-color: #02a0e6;
+}
+
+
+.btn.export-btn {
+  margin-left: 10px;
+  border-radius: 2rem;
+  font-family: 'Muli', sans-serif;
+  font-size: 14px;
+  color: #02a0e6;
+  background-color: white;
+  border-color: white;
+}
+
+.fa {
+  color: #02a0e6;
+}
+
+.export-label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  color: #2e2b29;
+}

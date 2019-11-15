@@ -1,0 +1,31 @@
+<div class="container-fluid">
+  <div class="row" *ngIf="authService.userData as user">
+
+    <nav class="col-md-2 d-md-block sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column" *ngFor="let cd of collectionDefinitionsList">
+          <li class="nav-item">
+            <a routerLink="/documents" [queryParams]="{type: cd.name}"
+               class="nav-link {{collectionDefinition != null && collectionDefinition.name == cd.name ? 'active' : 'inactive'}}">
+              {{cd.displayNamePlural}}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+
+    <!-- Main content -->
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 bg-light" *ngIf="collectionDefinition!=null">
+      <div class="inner-adjust">
+
+        <div class="row">
+          <div class="col-md-12">
+            <app-document-list></app-document-list>
+          </div>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</div>

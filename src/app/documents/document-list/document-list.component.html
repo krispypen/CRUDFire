@@ -1,0 +1,83 @@
+<button (click)="onNew()" class="btn btn-primary">Add new {{collectionDefinition.displayName.toLowerCase()}}</button>
+<h1>{{collectionDefinition.displayNamePlural}}</h1>
+<div *ngIf="permissionDenied; else datatable" class="alert alert-danger" role="alert">
+  You don't have permissions to view this list.
+</div>
+<ng-template #datatable>
+  <table matSort #tableSort="matSort" (matSortChange)="sortData($event)" class="table table-hover">
+    <thead>
+    <ng-container *ngFor="let column of collectionDefinition.fields">
+      <ng-container *ngIf="column.hideFromList == null || column.hideFromList === false">
+        <ng-container *ngIf="isSortable(column); else noSortabelHeader">
+          <th [mat-sort-header]="column.name">{{column.displayName}}</th>
+        </ng-container>
+        <ng-template #noSortabelHeader>
+          <th>{{column.displayName}}</th>
+        </ng-template>
+      </ng-container>
+    </ng-container>
+    <th class="actions">Actions</th>
+    </thead>
+    <tbody>
+    <tr *ngFor="let doc of list">
+      <ng-container *ngFor="let column of collectionDefinition.fields">
+        <td (click)="onEdit(doc)" [ngSwitch]="column.type"
+            *ngIf="column.hideFromList == null || column.hideFromList === false">
+          <ng-container *ngSwitchCase="fieldType.Select">
+            <ng-container *ngFor="let item of doc[column.name]; first as isFirst"><span
+              *ngIf="!isFirst">,</span>{{(getPossibleValues(column) | async)?.get(item)}}
+            </ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="fieldType.Text">
+            <ng-container *ngIf="column.isArray; else noArray">
+              <ng-container *ngFor="let item of doc[column.name]; first as isFirst"><span
+                *ngIf="!isFirst">,</span>{{(getPossibleValues(column) | async)?.get(item)}}
+              </ng-container>
+            </ng-container>
+            <ng-template #noArray>
+              <pre>{{stringValue(doc, column.name)}}</pre>
+            </ng-template>
+          </ng-container>
+          <ng-container *ngSwitchCase="fieldType.Textarea">
+            <pre>{{stringValue(doc, column.name)}}</pre>
+          </ng-container>
+          <ng-container *ngSwitchCase="fieldType.Image">
+            <img src="{{doc[column.name]}}" width="100"/>
+          </ng-container>
+          <ng-container *ngSwitchCase="fieldType.File">
+            <a href="{{doc[column.name]}}" target="_blank">{{getFilenameFromUrl(doc[column.name])}}</a>
+          </ng-container>
+          <ng-container *ngSwitchCase="fieldType.Timestamp">
+            {{formatDate(doc[column.name])}}
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            <pre>{{stringValue(doc, column.name)}}</pre>
+          </ng-container>
+        </td>
+      </ng-container>
+      <td *ngIf="canDelete(doc)"><a class="btn text-danger" (click)="onDelete(doc.id)"><i class="fa fa-trash"></i></a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="col-md12">
+    <div class="row">
+      <span class="export-label">export to:</span>
+      <button (click)="exportToJSON()" class="btn export-btn">JSON</button>
+      <button (click)="exportToCSV()" class="btn export-btn">CSV</button>
+      <button (click)="exportToXLSX()" class="btn export-btn">Excel</button>
+    </div>
+
+    <div class="row mt-3">
+      <span class="export-label">import from JSON:</span> <input class="file-input " type="file"
+                                                                 (change)="startImport($event.target, $event.target.files)">
+    </div>
+  </div>
+
+
+  <app-document></app-document>
+
+</ng-template>
+
+

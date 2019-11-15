@@ -2,8 +2,20 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import {columnDefinition} from './columndefinition';
+
 export const environment = {
-  production: false
+  production: false,
+  firebaseConfig: {
+    apiKey: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    authDomain: 'XXXXXXXXXX.firebaseapp.com',
+    databaseURL: 'https://XXXXXXXXXXX.firebaseio.com',
+    projectId: 'XXXXXXXXXX',
+    storageBucket: 'XXXXXXXXXXXX.appspot.com',
+    messagingSenderId: 'XXXXXXXXXXXXX'
+  },
+  name: 'CRUDFire',
+  columnDefinition
 };
 
 /*

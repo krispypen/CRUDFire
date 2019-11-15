@@ -1,0 +1,165 @@
+<div *ngIf="field.isArray==true && arrayIndex == null; else noArray" [@simpleFadeAnimationParent]>
+  <div class="list-item" *ngFor="let value of getValue(); let idx = index;trackBy:getArrayIndex" [@simpleFadeAnimation]="'in'">
+    <div class="border my-3">
+      <a style="float:right" (click)="getValue().splice(idx, 1)" class="btn btn-danger remove-btn"><i
+        class="fa fa-trash"></i></a>
+      <div class="mx-3">
+        <app-formelement class="p-3" [collectionDefinition]="collectionDefinition" [formData]="formData" [field]="field"
+                         [arrayIndex]="idx"></app-formelement>
+      </div>
+    </div>
+  </div>
+  <button type="button" (click)="getValue().push({})" class="btn btn-link">Add
+    <span *ngIf="getValue().length>0">another</span> {{field.itemDisplayName}}
+  </button>
+</div>
+
+<ng-template #noArray>
+  <ng-container [ngSwitch]="field.type">
+    <ng-container *ngSwitchCase="fieldType.Map">
+      <ng-container *ngFor="let subField of field.fields">
+        <div class="form-group row">
+          <label for="formfield_{{subField.name}}" class="col-sm-2 col-form-label">{{subField.displayName}}
+            <ng-container *ngIf="subField.required">*</ng-container>
+          </label>
+          <div class="col-sm-10">
+            <app-formelement [collectionDefinition]="collectionDefinition" [formData]="getValue()"
+                             [field]="subField"></app-formelement>
+            <small *ngIf="subField.description != null" class="form-text text-muted">{{subField.description}}
+            </small>
+          </div>
+          <!-- <div *ngIf="title.invalid && title.touched" class="validation-error">This field is required.</div>-->
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="fieldType.Text">
+      <ng-container *ngIf="(getPossibleValues(field) | async) as possibleValues">
+        <ng-container *ngIf="possibleValues?.length > 0; else justtext">
+          <select id="formfield_{{field.name}}" name="{{field.name}}"
+                  [ngModel]="getValue()" (ngModelChange)="setValue($event)" class="form-control">
+            <option class="dropdown-select" selected [ngValue]="null" (blur)="validateValueInternal()">
+              No {{field.displayName}}
+            </option>
+            <option class="dropdown-select"
+                    *ngFor="let v of possibleValues" value="{{v[0]}}">
+              {{v[1]}}
+            </option>
+          </select>
+        </ng-container>
+      </ng-container>
+      <ng-template #justtext>
+        <input name="{{field.name}}" [required]="field.required ? true : undefined"
+               [attr.maxlength]="field.maxlength" id="formfield_{{field.name}}"
+               #fullName="ngModel" [ngModel]="getValue()" (ngModelChange)="setValue($event)"
+               class="form-control" placeholder="{{field.displayName}}" (blur)="validateValueInternal()">
+      </ng-template>
+    </ng-container>
+    <ng-container *ngSwitchCase="fieldType.Number">
+      <ng-container *ngIf="(getPossibleValues(field) | async) as possibleValues">
+        <ng-container *ngIf="possibleValues?.length > 0; else justtext">
+          <select id="formfield_{{field.name}}" name="{{field.name}}"
+                  [ngModel]="getValue()" (ngModelChange)="setValue($event)" class="form-control">
+            <option class="dropdown-select" selected [ngValue]="null" (blur)="validateValueInternal()">
+              No {{field.displayName}}
+            </option>
+            <option class="dropdown-select"
+                    *ngFor="let v of possibleValues" value="{{v[0]}}">
+              {{v[1]}}
+            </option>
+          </select>
+        </ng-container>
+      </ng-container>
+      <ng-template #justtext>
+        <input type="number" name="{{field.name}}" [required]="field.required ? true : undefined"
+               [attr.maxlength]="field.maxlength" id="formfield_{{field.name}}"
+               #fullName="ngModel" [ngModel]="getValue()" (ngModelChange)="setValue($event)"
+               class="form-control" placeholder="{{field.displayName}}" (blur)="validateValueInternal()">
+      </ng-template>
+    </ng-container>
+    <ng-container *ngSwitchCase="fieldType.Select">
+      <select id="formfield_{{field.name}}" multiple name="{{field.name}}"
+              [ngModel]="getValue()" (ngModelChange)="setValue($event)" class="form-control"
+              (blur)="validateValueInternal()">
+        <option class="dropdown-select" selected [ngValue]="null">No {{field.displayName}}
+        </option>
+        <option class="dropdown-select" *ngFor="let v of (getPossibleValues(field) | async)"
+                value="{{v[0]}}">{{v[1]}}
+        </option>
+      </select>
+    </ng-container>
+    <ng-container *ngSwitchCase="fieldType.Email">
+      <input type="email" name="{{field.name}}" [attr.maxlength]="field.maxlength"
+             id="formfield_{{field.name}}" #fullName="ngModel"
+             [ngModel]="getValue()" (ngModelChange)="setValue($event)" class="form-control"
+             placeholder="{{field.displayName}}" (blur)="validateValueInternal()">
+    </ng-container>
+    <ng-container *ngSwitchCase="fieldType.Textarea">
+                                <textarea name="{{field.name}}" [attr.maxlength]="field.maxlength"
+                                          id="formfield_{{field.name}}" #fullName="ngModel"
+                                          [ngModel]="getValue()" (ngModelChange)="setValue($event)" class="form-control"
+                                          placeholder="{{field.displayName}}"
+                                          (blur)="validateValueInternal()"></textarea>
+    </ng-container>
+    <ng-container *ngSwitchCase="fieldType.Image">
+      <div class="form-control file-formelement">
+        <ng-container *ngIf="getValue()?.length>0; else noimage">
+          <img src="{{getValue()}}" width="200"/> <a
+          class="btn btn-danger remove-btn"
+          (click)="setValue(null)">Clear image</a>
+        </ng-container>
+        <ng-template #noimage>
+          <input ng-show="showDetails"
+                 class="file-input " type="file"
+                 (change)="startUpload($event.target.files)">
+        </ng-template>
+        <input type="hidden" name="{{field.name}}" id="formfield_{{field.name}}"
+               #fullName="ngModel" [ngModel]="getValue()" (ngModelChange)="setValue($event)"
+               placeholder="{{field.displayName}}">
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="fieldType.File">
+      <div class="form-control file-formelement">
+        <ng-container *ngIf="getValue()?.length>0; else nofile">
+          <a href="{{getValue()}}" width="200" target="_blank">{{getFilenameFromUrl(getValue())}}</a><a
+          class="btn btn-danger remove-btn"
+          (click)="setValue(null)">Clear file</a>
+        </ng-container>
+        <ng-template #nofile>
+          <input ng-show="showDetails"
+                 class="file-input " type="file"
+                 (change)="startUpload($event.target.files)">
+        </ng-template>
+        <input type="hidden" name="{{field.name}}" id="formfield_{{field.name}}"
+               #fullName="ngModel" [ngModel]="getValue()" (ngModelChange)="setValue($event)"
+               placeholder="{{field.displayName}}">
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="fieldType.Timestamp">
+      <input name="{{field.name}}" id="formfield_{{field.name}}" type="datetime-local"
+             [ngModel]="getValue()" (ngModelChange)="setValue($event)" class="form-control"
+             (blur)="validateValueInternal()">
+    </ng-container>
+    <ng-container *ngSwitchCase="fieldType.Geopoint">
+      <div class="row">
+        <div class="col">
+          Latitude: <input name="{{field.name}} lat" id="formfield_{{field.name}}" type="number"
+                           [ngModel]="getValue('_lat')" (ngModelChange)="setValue($event, '_lat')" class="form-control"
+                           (blur)="validateValueInternal()">
+        </div>
+        <div class="col">
+          Longitude: <input name="{{field.name}} long" id="formfield_{{field.name}}" type="number"
+                            [ngModel]="getValue('_long')" (ngModelChange)="setValue($event, '_long')"
+                            class="form-control" (blur)="validateValueInternal()">
+        </div>
+      </div>
+
+
+    </ng-container>
+  </ng-container>
+  <div *ngIf="isRequiredAndEmtpy() | async" class="validation-error formelement-error">{{field.displayName}} is
+    required.
+  </div>
+</ng-template>
+
+
+

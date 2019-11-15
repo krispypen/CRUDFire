@@ -1,0 +1,70 @@
+.navbar {
+  padding: 0;
+  padding-right: 10px;
+  background-color: white;
+}
+
+.navbar-brand {
+  min-width: 200px;
+  height: 60px;
+  background-color: #09D6E4;
+  padding-top: 14px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+  flex: 0 0 16.666667%;
+  max-width: 16.666667%;
+  font-family: 'Muli', sans-serif;
+  font-weight: bold;
+  color: #2e2b29;
+}
+
+.nav-link {
+  font-family: 'Muli', sans-serif;
+  cursor: pointer;
+}
+
+.dropdown-item {
+  cursor: pointer;
+}
+
+.displayName {
+  padding-left: 10px;
+  padding-right: 5px;
+}
+
+img {
+  border-radius: 50%;
+}
+
+.login-outer-section {
+  width: 100%;
+  max-width: 330px;
+  margin: auto;
+  padding-top: 60px;
+}
+
+.login-section {
+  text-align: center !important;
+}
+
+h1 {
+  font-family: 'Muli', sans-serif;
+  font-weight: bold;
+  color: #2e2b29;
+}
+
+button.btn-block {
+  margin-top: 40px;
+  border-radius: 2rem;
+  float: right;
+  font-family: 'Muli', sans-serif;
+  font-size: 14px;
+  background-color: #02a0e6;
+  border-color: #02a0e6;
+}
+
+.navbar-nav .dropdown-menu {
+  position: absolute;
+}
+

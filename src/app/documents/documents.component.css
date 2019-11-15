@@ -1,0 +1,26 @@
+.nav-link {
+  color: #2e2b29;
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.nav-link.active {
+  background-color: #f2f2f2 !important;
+}
+
+.col-md-2 {
+  padding: 0;
+}
+
+.bg-light {
+  background-color: #f2f2f2 !important;
+}
+
+.sidebar {
+  background-color: white;
+}
+
+main {
+  padding: 26px;
+}
