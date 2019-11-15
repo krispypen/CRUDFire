@@ -1,27 +1,66 @@
 # CrudFire
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.17.
+CrudFire is an easy way to manage your Firebase Cloud Firestore database.
 
-## Development server
+## Firebase configuration
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+You can put your firebase credentials in src/environments/environment.ts and src/environments/environment.prod.ts for production.
 
-## Code scaffolding
+## Crud configuration
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+You can put your configuration into src/environments/columndefinition.ts
 
-## Build
+## Supported fields
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+We currently support these type of fields:
+* Text
+* Textarea
+* Number
+* Email
+* Image
+* File
+* Timestamp
+* Select
+* Map
+* Geopoint
 
-## Running unit tests
+## Permissions
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Since we use google login you'll have to enable that in the firebase authentication settings. And for the permission rules you can use your own, we prefer something like:
 
-## Running end-to-end tests
+```
+function isAdmin(database) {
+	return request.auth.uid != null && exists(/databases/$(database)/documents/admin_users/$(request.auth.token.email));
+}
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+function isUser(database) {
+	return request.auth.uid != null && exists(/databases/$(database)/documents/users/$(request.auth.uid));
+}
 
-## Further help
+service cloud.firestore {
+  match /databases/{database}/documents {
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+    // All users and admins can read Skills
+    // All users and admins can write Skills
+    match /skills/{skill} {
+    	allow read, write: if isUser(database) || isAdmin(database);
+    }
+
+    // All users and admins can read Teams
+    // Only admins can write Teams
+    match /teams/{team} {
+    	allow read: if isUser(database) || isAdmin(database);
+      allow write: if isAdmin(database);
+    }
+
+    // All users can read Users
+		// Only own user can write own user and admins can write to all users
+    match /users/{user} {
+    	allow read: if isUser(database) || isAdmin(database);
+      allow write: if (isUser(database) && resource.id == request.auth.uid) || isAdmin(database);
+    }
+    
+  }
+}
+```
+
