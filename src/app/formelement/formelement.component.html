@@ -76,6 +76,14 @@
                class="form-control" placeholder="{{field.displayName}}" (blur)="validateValueInternal()">
       </ng-template>
     </ng-container>
+    <ng-container *ngSwitchCase="fieldType.Boolean">
+
+      <input ngbAutofocus type="checkbox" name="{{field.name}}" [required]="field.required ? true : undefined"
+             id="formfield_{{field.name}}"
+             #fullName="ngModel" [ngModel]="getValue()" (ngModelChange)="setValue($event)"
+             class="form-control" placeholder="{{field.displayName}}" (blur)="validateValueInternal()">
+
+    </ng-container>
     <ng-container *ngSwitchCase="fieldType.Select">
       <select id="formfield_{{field.name}}" multiple name="{{field.name}}"
               [ngModel]="getValue()" (ngModelChange)="setValue($event)" class="form-control"

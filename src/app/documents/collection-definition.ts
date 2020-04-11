@@ -49,6 +49,7 @@ export enum FieldType {
   Text = 'text',
   Textarea = 'textarea',
   Number = 'number',
+  Boolean = 'boolean',
   Email = 'email',
   Image = 'image',
   File = 'file',
