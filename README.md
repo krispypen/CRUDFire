@@ -2,6 +2,12 @@
 
 CrudFire is an easy way to manage your Firebase Cloud Firestore database.
 
+## Install
+
+nvm use 10
+npm install -g @angular/cli@8.3.17
+ng serve
+
 ## Firebase configuration
 
 You can put your firebase credentials in src/environments/environment.ts and src/environments/environment.prod.ts for production.
