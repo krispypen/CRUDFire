@@ -9,7 +9,7 @@
       </div>
     </div>
   </div>
-  <button type="button" (click)="getValue().push({})" class="btn btn-link">Add
+  <button type="button" (click)="getValue().push(getInitialValue(field))" class="btn btn-link">Add
     <span *ngIf="getValue().length>0">another</span> {{field.itemDisplayName}}
   </button>
 </div>

@@ -126,6 +126,22 @@ export class FormelementComponent implements OnInit {
     return this.possibleValues;
   }
 
+  getInitialValue(field: FieldDefinition) {
+    //TODO define a default value in FieldDefiniation?
+    switch(field.type) {
+      case FieldType.Text:
+      case FieldType.Textarea:
+      case FieldType.Email:
+      case FieldType.Image:
+        return '';
+      case FieldType.Boolean:
+        return false;
+      case FieldType.Number:
+        return 0;
+    }
+    return {};
+  }
+
   getPossibleValuesInternal(field: FieldDefinition): Observable<[string, string][]> {
     if (field.hasOwnProperty('possibleValues')) {
       return of(Array.from(field.possibleValues.entries()));
