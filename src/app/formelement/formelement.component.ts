@@ -122,7 +122,7 @@ export class FormelementComponent implements OnInit {
     this.validateValueInternal();
   }
 
-  getPossibleValues(): Observable<[string, string][]> {
+  getPossibleValues(field: FieldDefinition): Observable<[string, string][]> {
     return this.possibleValues;
   }
 
